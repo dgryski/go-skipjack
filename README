@@ -1,0 +1,5 @@
+This library is an implementation of the SKIPJACK encryption algorithm.
+Copyright (c) Damian Gryski <damian@gryski.com>
+Licensed under the GPLv3 or, at your option, any later version.
+
+SKIPJACK is a cipher with an 80-bit key and a 64-bit block size.
