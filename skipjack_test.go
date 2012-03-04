@@ -206,12 +206,9 @@ func TestSkipjackEncrypt(t *testing.T) {
 		}
 	}
 
-	// NOTE: In the standard, these vectors are stored:
-	// data: 07 06 05 04 03 02 01 00
-	//  key: 10 09 08 07 06 05 04 03 02 01 00
-	// whereas in the above standard, they data blocks are numbered
-	// data: 00 01 02 03 04 05 06 07
-	// So, when we come to use these, we call reverse() on the cipher text and key before using them
+	// NOTE: In the SKIPJACK standard, vectors are presented MSB, while in
+	// the validation document they're presented LSB.  Rather than
+	// rewriting the vectors, I'm just calling reverse() before use.
 
 	// validation vectors all encrypted with the 0 key
 	for _, v := range skipjackVariablePlaintextValidation {
