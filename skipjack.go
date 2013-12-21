@@ -1,14 +1,14 @@
 // Copyright (c) 2012 Damian Gryski <damian@gryski.com>
 // Licensed under the GPLv3 or, at your option, any later version.
 
+// Package skipjack is an implementation of the SKIPJACK encryption algorithm.
 /*
-   dskipjack is an implementation of the SKIPJACK encryption algorithm.
 
    References:
    http://csrc.nist.gov/groups/ST/toolkit/documents/skipjack/skipjack.pdf
 
 */
-package dskipjack
+package skipjack
 
 import (
 	"crypto/cipher"

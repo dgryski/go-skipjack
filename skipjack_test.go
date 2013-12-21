@@ -1,4 +1,4 @@
-package dskipjack
+package skipjack
 
 import (
 	"bytes"
