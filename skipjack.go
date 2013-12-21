@@ -11,6 +11,7 @@
 package dskipjack
 
 import (
+	"crypto/cipher"
 	"strconv"
 )
 
@@ -34,7 +35,8 @@ var ftable = [...]byte{
 	0x5e, 0x6c, 0xa9, 0x13, 0x57, 0x25, 0xb5, 0xe3, 0xbd, 0xa8, 0x3a, 0x01, 0x05, 0x59, 0x2a, 0x46,
 }
 
-type SkipjackCipher struct {
+// skipjackCipher is an instance of SKIPJACK encryption with a particular key
+type skipjackCipher struct {
 	key []byte
 }
 
@@ -44,10 +46,10 @@ func (k KeySizeError) Error() string {
 	return "dskipjack: invalid key size " + strconv.Itoa(int(k))
 }
 
-// New creates and returns a new SkipjackCipher.
-// The key argument should be 10 bytes.
-func New(key []byte) (*SkipjackCipher, error) {
-	c := new(SkipjackCipher)
+// New creates and returns a new cipher.Block implementing the SKIPJACK cipher.
+// The key argument must be 10 bytes.
+func New(key []byte) (cipher.Block, error) {
+	c := new(skipjackCipher)
 
 	if klen := len(key); klen != 10 {
 		return nil, KeySizeError(klen)
@@ -61,7 +63,8 @@ func New(key []byte) (*SkipjackCipher, error) {
 
 }
 
-func (c *SkipjackCipher) BlockSize() int { return 8 }
+// BlockSize returns the SKIPJACK block size
+func (c *skipjackCipher) BlockSize() int { return 8 }
 
 func g(key []byte, k int, w uint16) uint16 {
 
@@ -89,7 +92,8 @@ func ginv(key []byte, k int, w uint16) uint16 {
 	return (uint16(g1) << 8) + uint16(g2)
 }
 
-func (c *SkipjackCipher) Encrypt(dst, src []byte) {
+// Encrypt encrypts src into dst
+func (c *skipjackCipher) Encrypt(dst, src []byte) {
 
 	w1 := (uint16(src[0]) << 8) + uint16(src[1])
 	w2 := (uint16(src[2]) << 8) + uint16(src[3])
@@ -124,7 +128,8 @@ func (c *SkipjackCipher) Encrypt(dst, src []byte) {
 	dst[7] = byte(w4 & 0xff)
 }
 
-func (c *SkipjackCipher) Decrypt(dst, src []byte) {
+// Decrypt decrypts src into dst
+func (c *skipjackCipher) Decrypt(dst, src []byte) {
 
 	w1 := (uint16(src[0]) << 8) + uint16(src[1])
 	w2 := (uint16(src[2]) << 8) + uint16(src[3])
